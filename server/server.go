@@ -2,16 +2,16 @@ package server
 
 import (
 	"mythos-auth/config"
-
-	"github.com/labstack/echo/v4"
 )
 
 // Init initialize server
 func Init() error {
 	c := config.GetConfig()
-	e := echo.New()
-
-	e.Logger.Fatal(e.Start(":" + c.GetString("server.port")))
+	r, err := NewRouter()
+	if err != nil {
+		return err
+	}
+	r.Logger.Fatal(r.Start(":" + c.GetString("server.port")))
 
 	return nil
 }
