@@ -1,0 +1,9 @@
+{
+  "go.useLanguageServer": true,
+  "gopls": {
+      "formatting.gofumpt": true
+  },
+  "editor.codeActionsOnSave": {
+    "editor.action.indentationToTabs": true
+  }
+}
