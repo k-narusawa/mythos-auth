@@ -42,6 +42,8 @@ func (ces *ChangeEmailService) Invoke(in *ChangeEmailInputData) (out *ChangeEmai
 		return
 	}
 
+	apiClient.IdentityApi.DeleteIdentitySessions(context.Background(), in.Id).Execute()
+
 	return &ChangeEmailOutputData{
 		Id:        ui.Id,
 		Email:     in.Email,
