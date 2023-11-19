@@ -1,4 +1,4 @@
-package services
+package register_user
 
 type RegisterUserInputData struct {
 	Email    string `json:"email" validate:"required,email"`

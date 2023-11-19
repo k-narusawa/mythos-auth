@@ -1,4 +1,4 @@
-package services
+package register_user
 
 import (
 	"context"
