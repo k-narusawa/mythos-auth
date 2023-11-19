@@ -1,1 +1,5 @@
-docker
+docker/*
+
+!docker/hydra/hydra.yml
+!docker/kratos/config/kratos/identity.schema.json
+!docker/kratos/config/kratos/ktratos.yml
