@@ -78,6 +78,10 @@ services:
     image: mysql:8.2.0
     ports:
       - "3306:3306"
+    volumes:
+      - type: bind
+        source: ./docker/mysql
+        target: /var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_USER=docker
