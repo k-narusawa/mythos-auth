@@ -4,13 +4,17 @@ import (
 	"net/http"
 	"time"
 
+	services "mythos-auth/application/services/register_user"
+
 	"github.com/labstack/echo/v4"
 )
 
-type UserController struct{}
+type UserController struct {
+	services.RegisterUserService
+}
 
-func NewUserController() *UserController {
-	return new(UserController)
+func NewUserController(rus services.RegisterUserService) UserController {
+	return UserController{rus}
 }
 
 func (uc *UserController) Create(c echo.Context) error {
@@ -19,6 +23,11 @@ func (uc *UserController) Create(c echo.Context) error {
 	if err := c.Bind(uf); err != nil {
 		return c.String(http.StatusBadRequest, "Bad Request")
 	}
+
+	uc.RegisterUserService.Invoke(&services.RegisterUserInputData{
+		Email:    uf.Email,
+		Password: uf.Password,
+	})
 
 	return c.JSON(
 		http.StatusCreated,
