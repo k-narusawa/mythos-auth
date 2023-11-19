@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"net/http"
-	"time"
 
 	services "mythos-auth/application/services/register_user"
 
@@ -24,18 +23,21 @@ func (uc *UserController) Create(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "Bad Request")
 	}
 
-	uc.RegisterUserService.Invoke(&services.RegisterUserInputData{
+	od, err := uc.RegisterUserService.Invoke(&services.RegisterUserInputData{
 		Email:    uf.Email,
 		Password: uf.Password,
 	})
+	if err != nil {
+		return c.String(http.StatusInternalServerError, "Internal Server Error")
+	}
 
 	return c.JSON(
 		http.StatusCreated,
 		newUserResponse(
-			1,
-			"hoge@example.com",
-			time.Now(),
-			time.Now(),
+			od.Id,
+			od.Email,
+			od.CreatedAt,
+			od.UpdatedAt,
 		),
 	)
 }

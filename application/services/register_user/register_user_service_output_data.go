@@ -3,8 +3,8 @@ package services
 import "time"
 
 type RegisterUserOutputData struct {
-	Email     string `validate:"required,email"`
-	Password  string `validate:"required,min=8"`
+	Id        string
+	Email     string
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }

@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"mythos-auth/adapter/controllers"
+	services "mythos-auth/application/services/register_user"
 	"mythos-auth/config"
 
 	"github.com/labstack/echo/v4"
@@ -23,7 +24,8 @@ func NewRouter() (*echo.Echo, error) {
 	version := router.Group("/api/" + c.GetString("server.version"))
 
 	healthController := controllers.NewHealthController()
-	userController := controllers.NewUserController()
+	registerUserService := services.NewRegisterUserService()
+	userController := controllers.NewUserController(*registerUserService)
 	version.GET("/health", healthController.Index)
 	version.POST("/users", userController.Create)
 
