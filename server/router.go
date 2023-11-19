@@ -23,7 +23,9 @@ func NewRouter() (*echo.Echo, error) {
 	version := router.Group("/api/" + c.GetString("server.version"))
 
 	healthController := controllers.NewHealthController()
+	userController := controllers.NewUserController()
 	version.GET("/health", healthController.Index)
+	version.POST("/users", userController.Create)
 
 	return router, nil
 }
