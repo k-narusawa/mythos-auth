@@ -1,13 +1,45 @@
 serve:
   cookies:
     same_site_mode: Lax
+  admin:
+    cors:
+      enabled: true
+      allowed_origins:
+        - http://127.0.0.1:4455
+        - http://localhost:4455
+      allowed_methods:
+        - POST
+        - GET
+        - PUT
+        - PATCH
+        - DELETE
+      allowed_headers:
+        - Authorization
+      exposed_headers:
+        - Content-Type
+  public:
+    cors:
+      enabled: true
+      allowed_origins:
+        - http://127.0.0.1:4455
+        - http://localhost:4455
+      allowed_methods:
+        - POST
+        - GET
+        - PUT
+        - PATCH
+        - DELETE
+      allowed_headers:
+        - Authorization
+      exposed_headers:
+        - Content-Type
 
 urls:
   self:
     issuer: http://127.0.0.1:4444
-  consent: http://127.0.0.1:3000/consent
-  login: http://127.0.0.1:3000/login
-  logout: http://127.0.0.1:3000/logout
+  consent: http://127.0.0.1:4455/consent
+  login: http://127.0.0.1:4455/login
+  logout: http://127.0.0.1:4455/logout
 
 secrets:
   system:
@@ -15,7 +47,7 @@ secrets:
 
 oidc:
   subject_identifiers:
-    supported_types:a
+    supported_types:
       - pairwise
       - public
     pairwise:

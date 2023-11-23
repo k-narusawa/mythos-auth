@@ -2,6 +2,9 @@ version: v1.0.0
 
 dsn: memory
 
+oauth2_provider:
+  url: http://hydra:4445
+
 serve:
   public:
     base_url: http://127.0.0.1:4433/
@@ -94,6 +97,9 @@ cookies:
   same_site: Lax
 
 log:
+  level: debug
+  format: text
+
 identity:
   default_schema_id: preset://email
   schemas:

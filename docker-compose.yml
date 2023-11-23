@@ -12,36 +12,39 @@ services:
         source: ./docker/hydra
         target: /etc/config/hydra
     environment:
-      - DSN=mysql://root:root@tcp(mysqld:3306)/mysql?max_conns=20&max_idle_conns=4
+      - DSN=mysql://root:root@tcp(hydra-mysql:3306)/mysql?max_conns=20&max_idle_conns=4
     restart: unless-stopped
     depends_on:
       - hydra-migrate
     networks:
       - intranet
+
   hydra-migrate:
     image: oryd/hydra:v2.2.0-rc.3
     environment:
-      - DSN=mysql://root:root@tcp(mysqld:3306)/mysql?max_conns=20&max_idle_conns=4
+      - DSN=mysql://root:root@tcp(hydra-mysql:3306)/mysql?max_conns=20&max_idle_conns=4
     command: migrate -c /etc/config/hydra/hydra.yml sql -e --yes
     volumes:
       - type: bind
         source: ./docker/hydra
         target: /etc/config/hydra
     restart: on-failure
+    depends_on:
+      - hydra-mysql
     networks:
       - intranet
     
   kratos-migrate:
     image: oryd/kratos:v1.0.0
     environment:
-      - DSN=mysql://root:root@tcp(mysqld:3306)/mysql?max_conns=20&max_idle_conns=4
+      - DSN=mysql://root:root@tcp(kratos-mysql:3306)/mysql?max_conns=20&max_idle_conns=4
     volumes:
       - type: bind
         source: ./docker/kratos/config/kratos
         target: /etc/config/kratos
     command: migrate sql -e --yes
     depends_on:
-      - mysqld
+      - kratos-mysql
     networks:
       - intranet
 
@@ -51,7 +54,7 @@ services:
       - kratos-migrate
       - jaeger
     environment:
-      - DSN=mysql://root:root@tcp(mysqld:3306)/mysql?max_conns=20&max_idle_conns=4
+      - DSN=mysql://root:root@tcp(kratos-mysql:3306)/mysql?max_conns=20&max_idle_conns=4
       - LOG_LEVEL=trace
       - TRACING_PROVIDER=jaeger
       - TRACING_PROVIDERS_JAEGER_SAMPLING_SERVER_URL=http://jaeger:5778/sampling
@@ -74,13 +77,28 @@ services:
     networks:
       - intranet
 
-  mysqld:
+  hydra-mysql:
+    image: mysql:8.2.0
+    ports:
+      - "3307:3306"
+    volumes:
+      - type: bind
+        source: ./docker/hydra/mysql
+        target: /var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=docker
+      - MYSQL_PASSWORD=docker
+    networks:
+      - intranet
+
+  kratos-mysql:
     image: mysql:8.2.0
     ports:
       - "3306:3306"
     volumes:
       - type: bind
-        source: ./docker/mysql
+        source: ./docker/kratos/mysql
         target: /var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
