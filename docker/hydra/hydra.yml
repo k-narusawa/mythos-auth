@@ -15,8 +15,13 @@ serve:
         - DELETE
       allowed_headers:
         - Authorization
+        - Cookie
+        - Content-Type
+        - X-Session-Token
       exposed_headers:
         - Content-Type
+        - Set-Cookie
+      allow_credentials: true
   public:
     cors:
       enabled: true
@@ -31,8 +36,13 @@ serve:
         - DELETE
       allowed_headers:
         - Authorization
+        - Cookie
+        - Content-Type
+        - X-Session-Token
       exposed_headers:
         - Content-Type
+        - Set-Cookie
+      allow_credentials: true
 
 urls:
   self:
