@@ -31,8 +31,11 @@ func NewRouter() (*echo.Echo, error) {
 	registerUserService := register_user.NewRegisterUserService()
 	changeEmailService := change_email.NewChangeEmailService()
 	userController := controllers.NewUserController(*registerUserService, *changeEmailService)
+	mailController := controllers.NewMailController()
+
 	version.POST("/users", userController.Create)
 	version.PUT("/users/:id/email", userController.ChangeEmail)
+	version.POST("/admin/mail/send", mailController.Send)
 
 	return router, nil
 }

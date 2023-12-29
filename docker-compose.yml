@@ -14,8 +14,8 @@ services:
     environment:
       - DSN=mysql://root:root@tcp(hydra-mysql:3306)/mysql?max_conns=20&max_idle_conns=4
     restart: unless-stopped
-    depends_on:
-      - hydra-migrate
+    # depends_on:
+    #   - hydra-migrate
     networks:
       - intranet
 
@@ -50,9 +50,6 @@ services:
 
   kratos:
     image: oryd/kratos:v1.0.0
-    depends_on:
-      - kratos-migrate
-      - jaeger
     environment:
       - DSN=mysql://root:root@tcp(kratos-mysql:3306)/mysql?max_conns=20&max_idle_conns=4
       - LOG_LEVEL=trace
@@ -82,8 +79,8 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - type: bind
-        source: ./docker/hydra/mysql
+      - type: volume
+        source: hydra-mysql
         target: /var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
@@ -97,8 +94,8 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - type: bind
-        source: ./docker/kratos/mysql
+      - type: volume
+        source: kratos-mysql
         target: /var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
@@ -106,6 +103,18 @@ services:
       - MYSQL_PASSWORD=docker
     networks:
       - intranet
+  
+  mailslurper:
+    image: oryd/mailslurper:latest-smtps
+    platform: linux/x86_64
+    ports:
+      - '1025:1025'
+      - '4436:4436'
+      - '4437:4437'
 
 networks:
   intranet:
+
+volumes:
+  hydra-mysql:
+  kratos-mysql:

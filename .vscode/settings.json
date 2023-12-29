@@ -4,6 +4,6 @@
       "formatting.gofumpt": true
   },
   "editor.codeActionsOnSave": {
-    "editor.action.indentationToTabs": true
+    "editor.action.indentationToTabs": "explicit"
   }
 }
