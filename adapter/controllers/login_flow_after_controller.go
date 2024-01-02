@@ -22,9 +22,12 @@ func (lc *LoginFlowAfterController) LoginFlowAfter(c echo.Context) error {
 	}
 
 	fmt.Printf("UserID: %v\n", lf.UserID)
+	if lf.Email != nil {
+		fmt.Printf("Email: %v\n", *lf.Email)
+	}
+	if lf.XForwardedFor != nil {
+		fmt.Printf("X-Forwarded-For: %v\n", *lf.XForwardedFor)
+	}
 
-	return c.JSON(
-		http.StatusCreated,
-		"{}",
-	)
+	return c.NoContent(http.StatusNoContent)
 }

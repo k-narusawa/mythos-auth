@@ -25,8 +25,5 @@ func (mc *MailController) Send(c echo.Context) error {
 	fmt.Fprintf(os.Stdout, "To: %v\n", ve.To)
 	fmt.Fprintf(os.Stdout, "TemplateType: %v\n", ve.TemplateType)
 
-	return c.JSON(
-		http.StatusCreated,
-		"{}",
-	)
+	return c.NoContent(http.StatusNoContent)
 }
