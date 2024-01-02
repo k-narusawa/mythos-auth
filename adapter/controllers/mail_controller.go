@@ -15,7 +15,15 @@ func NewMailController() MailController {
 }
 
 func (mc *MailController) Send(c echo.Context) error {
-	fmt.Fprintf(os.Stderr, "Full HTTP Request: %v\n", c.Request().Body)
+	ve := new(VerificationEmailRequest)
+
+	if err := c.Bind(ve); err != nil {
+		return c.String(http.StatusBadRequest, "Bad Request")
+	}
+
+	fmt.Fprintf(os.Stdout, "Recipient: %v\n", ve.Recipient)
+	fmt.Fprintf(os.Stdout, "To: %v\n", ve.To)
+	fmt.Fprintf(os.Stdout, "TemplateType: %v\n", ve.TemplateType)
 
 	return c.JSON(
 		http.StatusCreated,

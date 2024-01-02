@@ -6,13 +6,15 @@ services:
       - "4444:4444" # Public port
       - "4445:4445" # Admin port
       - "5556:5555" # Port for hydra token user
-    # command: serve -c /etc/config/hydra/hydra.yml all --dev
+    command: serve -c /etc/config/hydra/hydra.yml all --dev
     volumes:
-      - type: volume
-        source: hydra
+      - type: bind
+        source: ./docker/hydra
         target: /etc/config/hydra
-    env_file:
-      - ./docker/hydra.env
+    environment:
+      - DSN=mysql://root:root@tcp(hydra-mysql:3306)/mysql?max_conns=20&max_idle_conns=4
+    # env_file:
+    #   - ./docker/hydra.env
       # - ./docker/hydra.env.nipogi
     restart: unless-stopped
     depends_on:
