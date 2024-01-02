@@ -107,6 +107,11 @@ services:
     networks:
       - intranet
   
+  ses-local:
+    image: 19992240/aws-ses-local
+    ports:
+      - "8005:8080"
+
   mailslurper:
     image: oryd/mailslurper:latest-smtps
     platform: linux/x86_64
