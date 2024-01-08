@@ -8,28 +8,6 @@ oauth2_provider:
 serve:
   public:
     base_url: http://127.0.0.1:4433/
-    cors:
-      allowed_origins:
-        - http://127.0.0.1:4455
-        - http://localhost:4455
-      allowed_methods:
-        - POST
-        - GET
-        - PUT
-        - PATCH
-        - DELETE
-      allowed_headers:
-        - Authorization
-        - Cookie
-        - Content-Type
-        - X-Session-Token
-      exposed_headers:
-        - Content-Type
-        - Set-Cookie
-      allow_credentials: true
-      options_passthrough: true
-      debug: true
-      enabled: true
   admin:
     base_url: http://127.0.0.1:4434/
     host: "0.0.0.0"
@@ -53,6 +31,14 @@ selfservice:
     totp:
       config:
         issuer: Kratos
+      enabled: true
+    webauthn:
+      config:
+        passwordless: true
+        rp:
+          display_name: Mythos
+          id: localhost
+          origin: http://localhost:4455
       enabled: true
 
   flows:
@@ -82,6 +68,7 @@ selfservice:
       after:
         password:
           hooks:
+            - hook: require_verified_address
             - hook: web_hook
               config:
                 method: POST
@@ -104,10 +91,7 @@ selfservice:
       after:
         password:
           hooks:
-            - hook: session
-        oidc:
-          hooks:
-            - hook: session
+            - hook: show_verification_ui
 
 cookies:
   domain: 127.0.0.1
